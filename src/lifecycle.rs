@@ -7,7 +7,7 @@ use semver::Version;
 
 use crate::{
     config::{CONTRACT_NAME, CONTRACT_VERSION},
-    msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, Price, QueryMsg},
+    msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, OwnerResp, Price, QueryMsg},
     storage::{OWNER, PRICE},
 };
 
@@ -64,9 +64,12 @@ pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> S
 
             PRICE.save(deps.storage, &price)?;
 
-            Ok(Response::new().add_event(
-                Event::new("set-price").add_attributes([("value", price.value.to_string())]),
-            ))
+            let mut event = Event::new("set-price").add_attribute("value", price.value.to_string());
+            if let Some(timestamp) = timestamp {
+                event = event.add_attribute("timestamp", timestamp.to_string());
+            }
+
+            Ok(Response::new().add_event(event))
         }
     }
 }
@@ -76,7 +79,7 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<QueryResponse> {
     match msg {
         QueryMsg::Owner {} => {
             let owner = OWNER.load(deps.storage)?;
-            let res = to_binary(&owner)?;
+            let res = to_binary(&OwnerResp { owner })?;
             Ok(res)
         }
         QueryMsg::Price {} => {

@@ -1,14 +1,17 @@
 mod common;
 use common::TestApp;
 use cosmwasm_std::{Addr, Decimal256};
-use simple_oracle::msg::{ExecuteMsg, Price, QueryMsg};
+use simple_oracle::msg::{ExecuteMsg, OwnerResp, Price, QueryMsg};
 
 #[test]
 fn auth() {
     let mut app = TestApp::new().unwrap();
 
     // first some sanity checks that everything is setup correctly
-    let owner: Addr = app.oracle_query(&QueryMsg::Owner {}).unwrap();
+    let owner = app
+        .oracle_query::<OwnerResp>(&QueryMsg::Owner {})
+        .unwrap()
+        .owner;
     let non_owner = Addr::unchecked("non_owner");
 
     assert_eq!(owner, app.owner);

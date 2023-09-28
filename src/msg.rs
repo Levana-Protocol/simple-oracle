@@ -32,12 +32,18 @@ pub enum QueryMsg {
     #[returns(Price)]
     Price {},
     /// Get the owner
-    #[returns(Addr)]
+    #[returns(OwnerResp)]
     Owner {},
 }
 
 #[cw_serde]
 pub struct MigrateMsg {}
+
+#[cw_serde]
+pub struct OwnerResp {
+    /// The owner address
+    pub owner: Addr,
+}
 
 #[cw_serde]
 pub struct Price {
