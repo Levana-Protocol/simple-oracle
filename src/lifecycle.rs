@@ -55,10 +55,11 @@ pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> S
             Ok(Response::new()
                 .add_event(Event::new("set-owner").add_attribute("owner", owner.as_str())))
         }
-        ExecuteMsg::SetPrice { value } => {
+        ExecuteMsg::SetPrice { value, timestamp } => {
             let price = Price {
                 value,
                 block_info: env.block,
+                timestamp,
             };
 
             PRICE.save(deps.storage, &price)?;

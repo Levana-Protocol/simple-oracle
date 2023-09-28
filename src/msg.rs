@@ -1,5 +1,5 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
-use cosmwasm_std::{Addr, BlockInfo, Decimal256};
+use cosmwasm_std::{Addr, BlockInfo, Decimal256, Timestamp};
 
 #[cw_serde]
 pub struct InstantiateMsg {
@@ -20,6 +20,8 @@ pub enum ExecuteMsg {
     SetPrice {
         /// The new price value
         value: Decimal256,
+        /// Optional timestamp for the price, independent of block time
+        timestamp: Option<Timestamp>,
     },
 }
 
@@ -43,4 +45,6 @@ pub struct Price {
     pub value: Decimal256,
     /// The block info when this price was set
     pub block_info: BlockInfo,
+    /// Optional timestamp for the price, independent of block_info.time
+    pub timestamp: Option<Timestamp>,
 }

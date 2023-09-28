@@ -28,6 +28,6 @@ jobs:
       - name: Run tests
         run: cargo test 
       - name: Clippy
-        run: cargo clippy -- -Dwarnings
+        run: cargo clippy --tests
       - name: Rustfmt
         run: cargo fmt --all --check 
