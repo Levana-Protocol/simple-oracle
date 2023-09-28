@@ -1,0 +1,36 @@
+[package]
+name = "simple_oracle"
+version = "0.1.0-beta.1"
+authors = ["Levana Team"]
+edition = "2021"
+
+exclude = [
+  # Those files are rust-optimizer artifacts. You might want to commit them for convenience but they should not be part of the source code publication.
+  "contract.wasm",
+  "hash.txt",
+]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# for more explicit tests, cargo test --features=backtraces
+backtraces = ["cosmwasm-std/backtraces"]
+# use library feature to disable all instantiate/execute/query exports
+library = []
+sanity = []
+
+[dependencies]
+cosmwasm-std = { version = "1.4.0", features = ["abort"] }
+cw2 = "1.1.0"
+cw-storage-plus = "1.1.0"
+serde = { version = "1.0.188", default-features = false, features = ["derive"] }
+semver = "1.0.19"
+cw-utils = "1.0.1"
+cosmwasm-schema = "1.4.0"
+
+[dev-dependencies]
+cw-multi-test = "0.17.0"
+anyhow = "1.0.75"

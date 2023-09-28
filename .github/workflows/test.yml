@@ -1,0 +1,34 @@
+name: Test
+
+on:
+  push:
+    branches: [main, develop]
+    tags:
+      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 10
+  RUST_BACKTRACE: short
+  RUSTUP_MAX_RETRIES: 10
+
+jobs:
+  rust_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.70.0
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Run tests
+        if: github.ref == 'refs/heads/develop'
+        run: cargo test 
+      - name: Clippy
+        run: cargo clippy -- -Dwarnings
+      - name: Rustfmt
+        run: cargo fmt --all --check 
