@@ -26,7 +26,6 @@ jobs:
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
       - name: Run tests
-        if: github.ref == 'refs/heads/develop'
         run: cargo test 
       - name: Clippy
         run: cargo clippy -- -Dwarnings
